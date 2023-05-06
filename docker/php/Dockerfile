@@ -28,6 +28,6 @@ ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
 RUN node --version
 RUN npm --version
 
-WORKDIR /src
-ADD . /src/storage
-RUN chown -R www-data:www-data /src/storage
+#WORKDIR /src
+#ADD . /src/storage
+#RUN chown -R www-data:www-data /src/storage
