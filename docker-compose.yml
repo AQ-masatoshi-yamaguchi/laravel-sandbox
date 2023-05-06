@@ -1,0 +1,42 @@
+version: '3'
+services:
+  sandbox-nginx:
+    container_name: "sandbox-nginx"
+    build:
+      context: ./docker/nginx
+    depends_on:
+      - sandbox-app
+    ports:
+      - 80:80
+    volumes:
+      - ./:/src
+
+  sandbox-app:
+    container_name: "sandbox-app"
+    build:
+      context: ./docker/php
+    depends_on:
+      - sandbox-mysql
+    volumes:
+      - ./:/src
+      - /src/node_modules
+      - /src/vendor
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+
+  sandbox-mysql:
+    image: mysql:8.0.28
+    command: --max_allowed_packet=32505856
+    container_name: "sandbox-mysql"
+    volumes:
+      - ./docker/mysql:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=sandbox
+    ports:
+      - 3306:3306
+
+  sandbox-redis:
+    image: redis:alpine
+    container_name: "sandbox-redis"
+    ports:
+      - 16379:6379
